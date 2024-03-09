@@ -1,9 +1,10 @@
 package ean.corte2;
 import java.util.Objects;
+import java.util.Random;
 import java.util.Scanner;
 
 public class Main {
-
+    private final Random rm = new Random();
     private final Scanner sc = new Scanner(System.in);
     /*
     * El metodo cargar, cargará los datos iniciales de nuestro array
@@ -15,6 +16,7 @@ public class Main {
 
     // codigo - Nombre - cantidad - iva(int) - precioUnitario - Subtotal - valorIva - Total
     private Object[][] data; // multidimensional de 8 columnas, la cantidad de filas dependera del usuario
+    private Object[][] dataSorted;
 
     public static void menu(){
         System.out.println("Bienvenido al programa de facturación. Aquí tienes el menú:\n" +
@@ -41,12 +43,25 @@ public class Main {
             //System.out.println("Ingresa el precio por unidad del producto\n");
             //this.data[i][4] = sc.nextFloat();
 
-            this.data[i][0] = 103765; // codigo (int)
+            this.data[i][0] = rm.nextInt(1000); // codigo (int)
             this.data[i][1] = "Libra carne de res"; // nombre (String)
             this.data[i][2] = 2; // cantidad (float)
-            this.data[i][3] = 19; // valor IVA en % (int)
+            this.data[i][3] = rm.nextInt(30); // valor IVA en % (int)
             this.data[i][4] = 10.18; // precio unitario (float)
         }
+    }
+    private Object[][] Ordenar(){ // Uso del algoritmo de Bubble sorting -> compara por parejas // O(n^2)
+        Object[] aux;
+        for (int i = 0; i < this.data.length; i++){ // aquí usamos el operador de casting -> (int) -> para poder comprar nuestros datos
+            for (int j = 0; j < this.data.length - i - 1; j++){ 
+                if ( (int) this.data[j][0] > (int) this.data[j+1][0]){
+                    aux = this.data[j];
+                    this.data[j] = this.data[j+1];
+                    this.data[j+1] = aux;
+                }
+            }
+        }
+        return this.data;
     }
     private void imprimirVerificacion(){
         // Titulos de la tabla
@@ -70,6 +85,7 @@ public class Main {
         System.out.println("Ingresa la cantidad de productos a añadir -> ");
         int cantidadDatos = sc.nextInt();
         main.cargar(cantidadDatos);
+        main.Ordenar();
         main.imprimirVerificacion();
     }
 }
