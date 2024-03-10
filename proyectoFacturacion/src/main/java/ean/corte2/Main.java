@@ -1,5 +1,4 @@
 package ean.corte2;
-import java.util.Objects;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -16,7 +15,6 @@ public class Main {
 
     // codigo - Nombre - cantidad - iva(int) - precioUnitario - Subtotal - valorIva - Total
     private Object[][] data; // multidimensional de 8 columnas, la cantidad de filas dependera del usuario
-    private Object[][] dataSorted;
 
     public static void menu(){
         System.out.println("Bienvenido al programa de facturación. Aquí tienes el menú:\n" +
@@ -43,13 +41,14 @@ public class Main {
             //System.out.println("Ingresa el precio por unidad del producto\n");
             //this.data[i][4] = sc.nextFloat();
 
-            this.data[i][0] = rm.nextInt(1000); // codigo (int)
+            this.data[i][0] = rm.nextInt(10); // codigo (int)
             this.data[i][1] = "Libra carne de res"; // nombre (String)
             this.data[i][2] = 2; // cantidad (float)
             this.data[i][3] = rm.nextInt(30); // valor IVA en % (int)
             this.data[i][4] = 10.18; // precio unitario (float)
         }
     }
+
     private Object[][] Ordenar(){ // Uso del algoritmo de Bubble sorting -> compara por parejas // O(n^2)
         Object[] aux;
         for (int i = 0; i < this.data.length; i++){ // aquí usamos el operador de casting -> (int) -> para poder comprar nuestros datos
@@ -63,6 +62,27 @@ public class Main {
         }
         return this.data;
     }
+
+    private int buscar(int target){ // Algoritmo de busqueda binaria -> funciona solo si el array esta ordenado
+        int menor = 0;
+        int mayor = this.data.length -1;
+
+        while (menor <= mayor){
+            int medio = menor + (mayor - menor) / 2;
+            int valor = (int) this.data[medio][0];
+
+            if (valor < target){  // si mi objetivo es mayor que mi valor entonces descarto la mitad izquierda del array
+                menor = medio + 1;
+            }else if(valor > target){ // si mi objetivo es menor que mi valor entonces descarto la mitad derecha del array
+                mayor = medio - 1;
+            }
+            else{ // Y si mi objetivo no es mayor ni menor quiere que decir que ya solo tengo un elemento en el array o no encontre el valor deseado
+                return medio;
+            }
+        }
+        return -1; // se retorna -1 si el objetivo no fue encontrado
+    }
+
     private void imprimirVerificacion(){
         // Titulos de la tabla
         System.out.printf("%-12s%-22s%-12s%-15s%-15s%n", "Codigo", "Nombre", "Cantidad","Valor IVA", "Precio Unitario");
@@ -87,5 +107,16 @@ public class Main {
         main.cargar(cantidadDatos);
         main.Ordenar();
         main.imprimirVerificacion();
+        
+        // busqueda
+        int target = 5;
+        int index = main.buscar(target);
+        if (index == -1){
+            System.out.println("Codigo de producto no encontrado");
+        }
+        else {
+            System.out.println("Codigo encontrado en el indice: " + index);
+        }
+
     }
 }
