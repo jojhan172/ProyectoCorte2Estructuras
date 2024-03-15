@@ -5,17 +5,47 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class InventarioProductos {
-    int cantidadProductos;
     Random rm = new Random();
     Scanner sc = new Scanner(System.in);
+    
+    private int cantidadProductos;
+    private Object[][] basicInfoProductos;// nombre del producto - cantidad en inventario - IVA producto - precio unitario
      // ** codigo - Nombre - cantidad - iva(int) - precioUnitario - Subtotal -
     // valorIva - Total **
      // multidimensional de 8 columnas, la cantidad de filas dependera del usuario
-    Object[][] data;
+    private Object[][] data;
     // se usa el tipo de dato Object para que nuestro array pueda tener varios tipos
     // de datos.
-    public InventarioProductos(int cantidadProductos){
-        this.cantidadProductos = cantidadProductos;
+    public InventarioProductos(){
+        this.basicInfoProductos= new Object[5][4];
+
+        this.basicInfoProductos[0][0] = "Arroz"; // nombres
+        this.basicInfoProductos[0][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[0][2] = 0; // IVA en %
+        this.basicInfoProductos[0][3] = 30000.0;
+
+
+        this.basicInfoProductos[1][0] = "Pescado"; // nombres
+        this.basicInfoProductos[1][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[1][2] = 0; // IVA en %
+        this.basicInfoProductos[1][3] = 30000.0;
+
+        this.basicInfoProductos[2][0] = "Aceite"; // nombres
+        this.basicInfoProductos[2][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[2][2] = 19; // IVA en %
+        this.basicInfoProductos[2][3] = 30000.0;
+
+        this.basicInfoProductos[3][0] = "Cereal"; // nombres
+        this.basicInfoProductos[3][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[3][2] = 19; // IVA en %
+        this.basicInfoProductos[3][3] = 30000.0;
+
+        this.basicInfoProductos[4][0] = "Chocolate"; // nombres
+        this.basicInfoProductos[4][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[4][2] = 5; // IVA en %
+        this.basicInfoProductos[4][3] = 30000.0;
+
+        this.cantidadProductos = basicInfoProductos.length;
     }
      
     /*
@@ -25,7 +55,9 @@ public class InventarioProductos {
      */
 
     
-
+    public Object[][] getData() {
+        return data;
+    }
    
 
     public static int menu() {
@@ -38,24 +70,24 @@ public class InventarioProductos {
                 "5. Modificar campos del registro\n" + // in -> codigo
                 "6. Eliminar campos del registro\n" + // in -> codigo
                 "7. Mostras en tablas las estructuras\n" +
-                "0. Salirr");
+                "0. Salir");
 
         System.out.println("Ingresa el número de la opción que deseas");
         int option = sc.nextInt();
 
-        return verificar(option);
+        return verificarOpcionValida(option);
     }
 
     // esta función verifica si el numero ingresado por el usuario es valido para
     // nuestro menu
-    public static int verificar(int num) {
+    public static int verificarOpcionValida(int num) {
         Scanner sc = new Scanner(System.in);
         if (num >= 0 && num < 8) {
             return num;
         } else {
             System.out.println("Opción incorrecta, intentalo nuevamente");
             int option = sc.nextInt();
-            verificar(option);
+            verificarOpcionValida(option);
         }
         return 0;
 
@@ -75,15 +107,15 @@ public class InventarioProductos {
             // System.out.println("Ingresa el precio por unidad del producto\n");
             // this.data[i][4] = sc.nextFloat();
 
-            this.data[i][0] = rm.nextInt(10); // codigo (int)
-            this.data[i][1] = "Libra carne de res"; // nombre (String)
-            this.data[i][2] = 2; // cantidad (float)
-            this.data[i][3] = rm.nextInt(30); // valor IVA en % (int)
-            this.data[i][4] = 10.18; // precio unitario (float)
+            this.data[i][0] = rm.nextInt(10000); // codigo (int)
+            this.data[i][1] = basicInfoProductos[i][0]; // nombre (String)
+            this.data[i][2] = basicInfoProductos[i][1]; // cantidad (float)
+            this.data[i][3] = basicInfoProductos[i][2]; // valor IVA en % (int)
+            this.data[i][4] = basicInfoProductos[i][3]; // precio unitario (float)
         }
     }
 
-    public void ordenar() { 
+    public void ordenarMayorMenor() { 
         // Uso del algoritmo de Bubble sorting -> compara por parejas // O(n^2)
         Object[] aux;
         for (int i = 0; i < this.data.length -1 ; i++) { // aquí usamos el operador de casting -> (int) -> para poder
@@ -100,8 +132,26 @@ public class InventarioProductos {
         
         return;
     }
+    public void ordenarMenorMayor() { 
+        // Uso del algoritmo de Bubble sorting -> compara por parejas // O(n^2)
+        Object[] aux;
+        for (int i = 0; i < this.data.length -1 ; i++) { // aquí usamos el operador de casting -> (int) -> para poder
+                                                     // comprar nuestros datos dabido a que estamos usando una matriz
+                                                     // tipo Object[][]
+            for (int j = 0; j < this.data.length - i - 1; j++) {
+                if ((int) this.data[j][0] > (int) this.data[j + 1][0]) {
+                    aux = this.data[j];
+                    this.data[j] = this.data[j + 1];
+                    this.data[j + 1] = aux;
+                }
+            }
+        }
+        
+        return;
+    }
 
     public int buscar(int target) { // Algoritmo de busqueda binaria -> funciona solo si el array esta ordenado
+        this.ordenarMenorMayor();
         int menor = 0;
         int mayor = this.data.length - 1;
 
@@ -117,14 +167,16 @@ public class InventarioProductos {
                 mayor = medio - 1;
             } else { // Y si mi objetivo no es mayor ni menor quiere que decir que ya solo tengo un
                      // elemento en el array o no encontre el valor deseado
+                this.ordenarMayorMenor();
                 return medio;
             }
         }
+        this.ordenarMayorMenor();
         return -1; // se retorna -1 si el objetivo no fue encontrado
     }
 
     public void modificar(int target, int columna) {
-        this.ordenar(); // ordenamos el array ya que es necesario para poder buscar
+         // ordenamos el array ya que es necesario para poder buscar
         int index = this.buscar(target); // buscamos si el dato ingresado existe dentro del array
         if (index == -1) { // si no existe simplemente avisamos
             System.out.println("Código de producto no encontrado");
@@ -163,10 +215,11 @@ public class InventarioProductos {
             System.out.printf("%-12d%-22s%-12d%-15s%-15.1f%n", this.data[index][0], this.data[index][1],
                     this.data[index][2], this.data[index][3], this.data[index][4]);
         }
+        this.ordenarMayorMenor(); // se ordena nuevamente para evitar errores
     }
 
     public void eliminarRegistro(int codigo) {
-        this.ordenar();
+        this.ordenarMayorMenor();
         // verificamos que la fila exista dentro del array
         int filaAELiminar = this.buscar(codigo);
         if (filaAELiminar >= 0 && filaAELiminar < this.data.length) {
@@ -197,10 +250,13 @@ public class InventarioProductos {
         System.out.printf("%-12s%-22s%-12s%-15s%-15s%n", "1. Codigo", "2. Nombre", "3. Cantidad", "4. Valor IVA",
                 "5. Precio Unitario");
         System.out.println();
-
-        // recorrido de filas en data
-        for (Object[] fila : this.data) {
-            System.out.printf("%-12d%-22s%-12d%-15s%-15.1f%n", fila[0], fila[1], fila[2], fila[3], fila[4]);
+        if(this.data!= null){
+            // recorrido de filas en data
+            for (Object[] fila : this.data) {
+                System.out.printf("%-12d%-22s%-12d%-15s%-15.2f%n", fila[0], fila[1], fila[2], fila[3], fila[4]);
+            }
+        }else{
+            System.out.println("Ups, al parecer olvidaste cargar el inventario de productos primero");
         }
     }
 
@@ -210,11 +266,10 @@ public class InventarioProductos {
         InventarioProductos main = null;// inicializar variable para almacenar la factura
         System.out.print("Bienvenido al programa de facturación. \n");
         int opcion = menu();
-
         while (opcion != 0) {
             switch (opcion) {
                 case 1:
-                    main = new InventarioProductos(20);
+                    main = new InventarioProductos();
                     System.out.println("Inventario creado correctamente, ya puedes cargar los productos.");
                     opcion = menu();
                     break;
@@ -238,7 +293,7 @@ public class InventarioProductos {
                     break;
 
                 case 3:
-                    main.ordenar();
+                    main.ordenarMayorMenor();
                     System.out.println("Productos ordenados correctamente.");
                     opcion = menu();
                     break;
