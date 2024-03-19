@@ -13,7 +13,7 @@ public class InventarioProductos {
      // ** codigo - Nombre - cantidad - iva(int) - precioUnitario - Subtotal -
     // valorIva - Total **
      // multidimensional de 8 columnas, la cantidad de filas dependera del usuario
-    private Object[][] data;
+    public Object[][] data;
     // se usa el tipo de dato Object para que nuestro array pueda tener varios tipos
     // de datos.
     public InventarioProductos(){
