@@ -1,12 +1,13 @@
 package ean.corte2;
 
 import java.util.Scanner;
+import java.util.Stack;
+
 import ean.corte2.*;
 
 // workin' in
 public class Main {
-    Cliente[] clientes;
-    Factura[] facturas;
+    
 
     // Menu clientes
     /*
@@ -92,29 +93,92 @@ public class Main {
         }
     }
 
+    public static void ImprimirClientes(Stack<Cliente> stackClientes){
+        Stack<Cliente> pivot = new Stack<Cliente>();
+        pivot.addAll(stackClientes);
+
+        System.out.println("Elementos de la pila clientes: \n");
+
+        System.out.printf("%-15s%-22s%n", "1. Cedula", "2. Nombre");
+        System.out.println();
+        while (!pivot.isEmpty()) {
+            Object activoObject = pivot.pop();
+            Cliente activo = (Cliente) activoObject;
+            if (activo != null) {
+                System.out.printf("%-15d%-22s%n", activo.getCedula(), activo.getNombre());
+            }  
+        }
+    }
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-        InventarioProductos inventario = new InventarioProductos();
-        Object[][] data = inventario.getData();
-        Cliente clienteActivo = null;
-        Factura nuevaFactura = null;
+        
+        // Stacks o pilas para el almacenamiento de todos los usuarios que se creen
+        Stack clientes = new Stack<Cliente>();
+        Stack facturas = new Stack<Factura>();
 
+        // Quemamos cliente para las pruebas del codigo
+
+        Cliente cliente1 = new Cliente(23306457, "Blanca");
+        Cliente cliente2 = new Cliente(4327437, "Eugenio");
+        Cliente cliente3 = new Cliente(1023782439,"Steven");
+        Cliente cliente4 = new Cliente(1234576892,"Geral");
+        Cliente cliente5 = new Cliente(1039762139,"Jenny");
+
+
+        clientes.push(cliente1);
+        clientes.push(cliente2);
+        clientes.push(cliente3);
+        clientes.push(cliente4);
+        clientes.push(cliente5);
+
+        // Importamos e instaciamos el inventario para poder que tanto administrador y cliente lo manipulen
+        InventarioProductos inventario = new InventarioProductos(); // Importamos
+        Object[][] data = inventario.getData(); // instanciamos en una variable local
+
+        // Instanciamos ambas variables para poder vericifar si estan vacias o no en ejecuciones posteriores
+        Cliente clienteActivo = null;   
+        Factura nuevaFactura = null;
+        
+        // antes de iniciar el while principal, preguntamos el tipo de usuario a iniciar 
         int tipoUsuario = menuPrincipal();
+
+        // Este while mantendra el menu principal y la ejecuación del programa
         while (tipoUsuario != -1) {
+
+            // Usuario cliente
+            // tendra solo las opciones de facturación
             if (tipoUsuario == 1) {
-                // Usuario cliente
-                // tendra solo las opciones de facturación
+                // iniciamos userEntre como un dato aislado para poder iniciar el while, 
+                // lo anterior para poder que el usuario pueda entra y salir muchas veces al menu principal
                 int userEntry = -1;
+
+                // Verificamos la existencia del inventario por cuestiones practicas para evitar errores
                 if (data == null) {
                     inventario.cargar();
                 }
+                // While que mantendra al usuario dentro del menu cliente, 
+                //si ingresa 0 este While se rompre y sale al while del menu principal
                 while (userEntry != 0) {
                     
                     switch (userEntry) {
                         case 1:
                             // String nombre = sc.nextLine();
                             // int cedula = sc.nextInt();
+                            int stackCapacity = clientes.size();
+                            clientes.setSize(stackCapacity + 1); // se aumenta el tamaño del stack de uno en uno cada que se agrega un cliente
+
                             clienteActivo = new Cliente(1003765269, "Johan");
+                            clientes.push(clienteActivo);
+                            System.out.println(clientes.capacity());
+
+                            // consiguiendo los codigos de las facturas del cliente
+                            // sera util a la hora de armar la base de facturas
+                            clienteActivo.addCodigoFactura(102030);
+                            int[] facturasCliente = clienteActivo.getCodigoFacturas();
+                            System.out.println(facturasCliente[0]);
+
+                            
+
                             System.out.println("Cliente creado correctamente");
                             break;
                         case 2:
@@ -148,7 +212,7 @@ public class Main {
                 // trendra todas las opciones de inventarioProductos
                 // como modificar y eliminar productos del inventario
                 int userEntry = menuAdmin();
-                data = inventario.getData();
+                
                 while (userEntry != 0) {
                     switch (userEntry) {
                         case 1:
@@ -206,6 +270,9 @@ public class Main {
 
                         case 7:
                             inventario.imprimirVerificacion();
+                            break;
+                        case 8:
+                            ImprimirClientes(clientes);
                             break;
                     }
                     userEntry = menuAdmin();
