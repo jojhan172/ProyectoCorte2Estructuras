@@ -83,7 +83,7 @@ public class Main {
 
     public static int verificarExistenciaUsuarioYFactura(Cliente cliente, Factura factura) {
         if (cliente != null && factura != null) {
-            return 1; // se retorna uno si ambos parametros existen y son diferentes de null
+            return 1; // se retorna 1 si ambos parametros existen y son diferentes de null
         } else if (cliente == null) {
             System.out.println("Al parecer no existe un cliente activo. Crea uno e intentalo nuevamente.");
             return 0;
@@ -117,7 +117,6 @@ public class Main {
         Stack facturas = new Stack<Factura>();
 
         // Quemamos cliente para las pruebas del codigo
-
         Cliente cliente1 = new Cliente(23306457, "Blanca");
         Cliente cliente2 = new Cliente(4327437, "Eugenio");
         Cliente cliente3 = new Cliente(1023782439,"Steven");
@@ -137,7 +136,7 @@ public class Main {
 
         // Instanciamos ambas variables para poder vericifar si estan vacias o no en ejecuciones posteriores
         Cliente clienteActivo = null;   
-        Factura nuevaFactura = null;
+        Factura facturaActiva = null;
         
         // antes de iniciar el while principal, preguntamos el tipo de usuario a iniciar 
         int tipoUsuario = menuPrincipal();
@@ -186,7 +185,7 @@ public class Main {
                             break;
                         case 3:
                             if (clienteActivo != null) {
-                                nuevaFactura = new Factura(inventario, clienteActivo);
+                                facturaActiva = new Factura(inventario, clienteActivo);
                                 System.out.println("Carrito de comprar preparado, ya puedes añadir tus productos");
                             }else{
                                 System.out.println("Al parecer no hay un cliente creado. Crea uno e intentalo nuevamente");
@@ -194,14 +193,23 @@ public class Main {
                             break;
 
                         case 4:
-                            if (verificarExistenciaUsuarioYFactura(clienteActivo, nuevaFactura) == 1) {
-
+                            if (verificarExistenciaUsuarioYFactura(clienteActivo, facturaActiva) == 1) {
+                                System.out.println("Ingresa el codigo del producto a añadir");
+                                int codigoProducto = sc.nextInt();
+                                System.out.println("Ingresa la cantidad que deseas de este producto");
+                                int cantidadProducto = sc.nextInt();
+                                facturaActiva.añadirAFactura(codigoProducto, cantidadProducto);
+                                facturaActiva.imprimirFactura();
+                                break;
+                            }else{
+                                break;
                             }
-                            break;
+
                         case 5:
                             int entrada = sc.nextInt();
                             // factura.añadirProducto(codigoProducto)
                             break;
+                        case 7: facturaActiva.imprimirFactura();
                         default:
                             break;
                     }
