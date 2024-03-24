@@ -157,21 +157,17 @@ public class InventarioProductos {
 
         while (menor <= mayor) {
             int medio = menor + (mayor - menor) / 2;
-            int valor = (int) this.data[medio][0];
 
-            if (valor < target) { // si mi objetivo es mayor que mi valor entonces descarto la mitad izquierda del
-                                  // array
-                menor = medio + 1;
-            } else if (valor > target) { // si mi objetivo es menor que mi valor entonces descarto la mitad derecha del
-                                         // array
-                mayor = medio - 1;
-            } else { // Y si mi objetivo no es mayor ni menor quiere que decir que ya solo tengo un
-                     // elemento en el array o no encontre el valor deseado
-                this.ordenarMayorMenor();
-                return medio;
+            if((int)this.data[medio][0] == target){
+                return medio; // si mi objetivo es igual a mi valor del medio entonces ya encontre mi target
+            }else if ((int) this.data[medio][0] < target){ // si me objetivo es mayor que mi valor del centro actual   
+                menor = medio +1;                           //entonces descarto la mitad izquierda del array
+            }else{
+                mayor = medio-1; // si mi objetivo es menor que el medio entocnes decarto la mitad derecha
             }
+
         }
-        this.ordenarMayorMenor();
+        
         return -1; // se retorna -1 si el objetivo no fue encontrado
     }
 
@@ -257,91 +253,6 @@ public class InventarioProductos {
             }
         }else{
             System.out.println("Ups, al parecer olvidaste cargar el inventario de productos primero");
-        }
-    }
-
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-
-        InventarioProductos main = null;// inicializar variable para almacenar la factura
-        System.out.print("Bienvenido al programa de facturación. \n");
-        int opcion = menu();
-        while (opcion != 0) {
-            switch (opcion) {
-                case 1:
-                    main = new InventarioProductos();
-                    System.out.println("Inventario creado correctamente, ya puedes cargar los productos.");
-                    opcion = menu();
-                    break;
-                case 2:// Solicitud de la cantidad total de ingresos a realizar
-                    try {
-                        if (main != null) { // Verifica si hay una factura creada.
-                            //System.out.println("Ingresa la cantidad de productos a añadir -> ");
-                            //int cantidadDatos = sc.nextInt();
-                            main.cargar();
-                            System.out.println("Productos añadidos correctamente");
-                            opcion = menu();
-                        } else {
-                            System.out.println("\nNo se ha creado ninguna factura, crea una y luego continúa.");
-                            opcion = menu();
-                        }
-
-                    } catch (Exception e) {
-                        System.out.println("Hubo un error, intenta crear una nueva factura");
-                        opcion = menu();
-                    }
-                    break;
-
-                case 3:
-                    main.ordenarMayorMenor();
-                    System.out.println("Productos ordenados correctamente.");
-                    opcion = menu();
-                    break;
-
-                case 4:
-                    System.out.println("Ingresa el codigo del producto a buscar -> ");
-                    int target = sc.nextInt();
-                    int index = main.buscar(target);
-
-                    if (index == -1) {
-                        System.out.println("Codigo de producto no encontrado");
-                    } else {
-                        System.out.println("Codigo encontrado en el indice: " + index);
-                        System.out.printf("%-12s%-22s%-12s%-15s%-15s%n", "1. Codigo", "2. Nombre", "3. Cantidad",
-                                "4. Valor IVA", "5. Precio Unitario");
-                        System.out.printf("%-12d%-22s%-12d%-15s%-15.1f%n", main.data[index][0], main.data[index][1],
-                                main.data[index][2], main.data[index][3], main.data[index][4]);
-                    }
-                    opcion = menu();
-                    break;
-
-                case 5:
-                    System.out.println("Ingresa el codigo del producto a editar");
-                    int code = sc.nextInt();
-                    System.out.println("Columna a editar");
-                    int column = sc.nextInt();
-                    main.modificar(code, column);
-
-                    opcion = menu();
-                    break;
-
-                case 6:
-                    System.out.println("Ingresa el codigo del producto a eliminar");
-                    int delCode = sc.nextInt();
-                    main.eliminarRegistro(delCode);
-                    opcion = menu();
-                    break;
-
-                case 7:
-                    main.imprimirVerificacion();
-                    opcion = menu();
-                    break;
-
-                default:
-                    System.out.println("Algo salió mal, intenta crear una nueva factura");
-                    opcion = menu();
-                    break;
-            }
         }
     }
 }

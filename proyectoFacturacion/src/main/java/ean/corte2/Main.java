@@ -36,7 +36,7 @@ public class Main {
                 "2. Ver inventario de la tienda\n" +
                 "3. Crear nuevo carrito de compras\n" + // in -> cantidad de datos a ingresar
                 "4. Añadir producto al carrito\n" + // true o false -> mayor a menor
-                "5. Editar item del carrito\n" + // int -> codigo
+                "5. Editar cuanto quieres de cada producto\n" + // int -> codigo
                 "6. Eliminar producto del carrito\n" + // int -> codigo
                 "7. Mostrar factura del carrito\n" + // int -> codigo
                 "8. \n" +
@@ -200,15 +200,26 @@ public class Main {
                                 int cantidadProducto = sc.nextInt();
                                 facturaActiva.añadirAFactura(codigoProducto, cantidadProducto);
                                 facturaActiva.imprimirFactura();
+            
                                 break;
                             }else{
                                 break;
                             }
 
                         case 5:
-                            int entrada = sc.nextInt();
+                            if (verificarExistenciaUsuarioYFactura(clienteActivo, facturaActiva) == 1) {
+                                facturaActiva.imprimirFactura();
+                                System.out.println("Ingresa en que posición de la lista esta el producto a editar");
+                                int indexProducto = sc.nextInt();
+                                System.out.println("Ingresa la nueva cantidad para este producto");
+                                facturaActiva.editarProductoFactura(indexProducto);
+                                facturaActiva.imprimirFactura();
+                                break;
+                            }else{
+                                break;
+                            }
                             // factura.añadirProducto(codigoProducto)
-                            break;
+                            
                         case 7: facturaActiva.imprimirFactura();
                         default:
                             break;
@@ -240,7 +251,7 @@ public class Main {
                             }
 
                         case 3:
-                            inventario.ordenarMayorMenor();
+                            inventario.ordenarMenorMayor();
                             System.out.println("Productos ordenados correctamente.");
                             break;
 
