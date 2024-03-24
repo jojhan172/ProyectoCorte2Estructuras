@@ -220,7 +220,19 @@ public class Main {
                             }
                             // factura.añadirProducto(codigoProducto)
                             
-                        case 7: facturaActiva.imprimirFactura();
+                        case 7: 
+                            if (verificarExistenciaUsuarioYFactura(clienteActivo, facturaActiva) == 1) {
+                                facturaActiva.imprimirFactura();
+                                break;
+                            }
+                            break;
+                            
+                        case 8:
+                        if (verificarExistenciaUsuarioYFactura(clienteActivo, facturaActiva) == 1) {
+                            
+                            break;
+                        }
+                        break;
                         default:
                             break;
                     }

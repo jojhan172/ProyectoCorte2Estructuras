@@ -21,29 +21,29 @@ public class InventarioProductos {
 
         this.basicInfoProductos[0][0] = "Arroz"; // nombres
         this.basicInfoProductos[0][1] = rm.nextInt(100); // cantidad
-        this.basicInfoProductos[0][2] = 0; // IVA en %
-        this.basicInfoProductos[0][3] = 30000.0;
+        this.basicInfoProductos[0][2] = 19; // IVA en %
+        this.basicInfoProductos[0][3] = 30000.0f;
 
 
         this.basicInfoProductos[1][0] = "Pescado"; // nombres
         this.basicInfoProductos[1][1] = rm.nextInt(100); // cantidad
-        this.basicInfoProductos[1][2] = 0; // IVA en %
-        this.basicInfoProductos[1][3] = 30000.0;
+        this.basicInfoProductos[1][2] = 19; // IVA en %
+        this.basicInfoProductos[1][3] = 30000.0f;
 
         this.basicInfoProductos[2][0] = "Aceite"; // nombres
         this.basicInfoProductos[2][1] = rm.nextInt(100); // cantidad
         this.basicInfoProductos[2][2] = 19; // IVA en %
-        this.basicInfoProductos[2][3] = 30000.0;
+        this.basicInfoProductos[2][3] = 30000.0f;
 
         this.basicInfoProductos[3][0] = "Cereal"; // nombres
         this.basicInfoProductos[3][1] = rm.nextInt(100); // cantidad
         this.basicInfoProductos[3][2] = 19; // IVA en %
-        this.basicInfoProductos[3][3] = 30000.0;
+        this.basicInfoProductos[3][3] = 30000.0f;
 
         this.basicInfoProductos[4][0] = "Chocolate"; // nombres
         this.basicInfoProductos[4][1] = rm.nextInt(100); // cantidad
         this.basicInfoProductos[4][2] = 5; // IVA en %
-        this.basicInfoProductos[4][3] = 30000.0;
+        this.basicInfoProductos[4][3] = 30000.0f;
 
         this.cantidadProductos = basicInfoProductos.length;
     }
@@ -57,40 +57,6 @@ public class InventarioProductos {
     
     public Object[][] getData() {
         return data;
-    }
-   
-
-    public static int menu() {
-        Scanner sc = new Scanner(System.in);
-        System.out.println("\nMenú:\n" +
-                "1. Crear nueva factura\n" +
-                "2. Cargar\n" + // in -> cantidad de datos a ingresar
-                "3. Ordenar\n" + // true o false -> mayor a menor
-                "4. Buscar\n" + // int -> codigo
-                "5. Modificar campos del registro\n" + // in -> codigo
-                "6. Eliminar campos del registro\n" + // in -> codigo
-                "7. Mostras en tablas las estructuras\n" +
-                "0. Salir");
-
-        System.out.println("Ingresa el número de la opción que deseas");
-        int option = sc.nextInt();
-
-        return verificarOpcionValida(option);
-    }
-
-    // esta función verifica si el numero ingresado por el usuario es valido para
-    // nuestro menu
-    public static int verificarOpcionValida(int num) {
-        Scanner sc = new Scanner(System.in);
-        if (num >= 0 && num < 8) {
-            return num;
-        } else {
-            System.out.println("Opción incorrecta, intentalo nuevamente");
-            int option = sc.nextInt();
-            verificarOpcionValida(option);
-        }
-        return 0;
-
     }
 
     public void cargar() {
@@ -106,6 +72,9 @@ public class InventarioProductos {
             // this.data[i][3]= sc.nextInt();
             // System.out.println("Ingresa el precio por unidad del producto\n");
             // this.data[i][4] = sc.nextFloat();
+            // [5] Iva unitario
+            // [6] subtotal
+            // [7] Total por producto
 
             this.data[i][0] = rm.nextInt(10000); // codigo (int)
             this.data[i][1] = basicInfoProductos[i][0]; // nombre (String)
