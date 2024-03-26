@@ -17,35 +17,65 @@ public class InventarioProductos {
     // se usa el tipo de dato Object para que nuestro array pueda tener varios tipos
     // de datos.
     public InventarioProductos(){
-        this.basicInfoProductos= new Object[5][4];
+        this.basicInfoProductos= new Object[7][4];
 
-        this.basicInfoProductos[0][0] = "Arroz"; // nombres
+        this.basicInfoProductos[0][0] = "Arroz 25lb"; // nombres
         this.basicInfoProductos[0][1] = rm.nextInt(100); // cantidad
-        this.basicInfoProductos[0][2] = 19; // IVA en %
-        this.basicInfoProductos[0][3] = 30000.0f;
+        this.basicInfoProductos[0][2] = 0; // IVA en %
+        this.basicInfoProductos[0][3] = 57600.0f;
 
 
-        this.basicInfoProductos[1][0] = "Pescado"; // nombres
+        this.basicInfoProductos[1][0] = "Frijoles Enlatados 310g "; // nombres
         this.basicInfoProductos[1][1] = rm.nextInt(100); // cantidad
         this.basicInfoProductos[1][2] = 19; // IVA en %
-        this.basicInfoProductos[1][3] = 30000.0f;
+        this.basicInfoProductos[1][3] = 6400.0f;
 
-        this.basicInfoProductos[2][0] = "Aceite"; // nombres
+        this.basicInfoProductos[2][0] = "Harina de Maiz 1kg"; // nombres
         this.basicInfoProductos[2][1] = rm.nextInt(100); // cantidad
-        this.basicInfoProductos[2][2] = 19; // IVA en %
-        this.basicInfoProductos[2][3] = 30000.0f;
+        this.basicInfoProductos[2][2] = 5; // IVA en %
+        this.basicInfoProductos[2][3] = 4500.0f;
 
-        this.basicInfoProductos[3][0] = "Cereal"; // nombres
+        this.basicInfoProductos[3][0] = "Aceite de Oliva 500ml"; // nombres
         this.basicInfoProductos[3][1] = rm.nextInt(100); // cantidad
         this.basicInfoProductos[3][2] = 19; // IVA en %
-        this.basicInfoProductos[3][3] = 30000.0f;
+        this.basicInfoProductos[3][3] = 33900.0f;
 
-        this.basicInfoProductos[4][0] = "Chocolate"; // nombres
+        this.basicInfoProductos[4][0] = "Azucar 2kg"; // nombres
         this.basicInfoProductos[4][1] = rm.nextInt(100); // cantidad
         this.basicInfoProductos[4][2] = 5; // IVA en %
-        this.basicInfoProductos[4][3] = 30000.0f;
+        this.basicInfoProductos[4][3] = 14900.0f;
 
-        this.cantidadProductos = basicInfoProductos.length;
+        this.basicInfoProductos[5][0] = "Cafe 170gr"; // nombres
+        this.basicInfoProductos[5][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[5][2] = 5; // IVA en %
+        this.basicInfoProductos[5][3] = 29700.0f;
+
+        this.basicInfoProductos[6][0] = "Coca Cola 1.5L"; // nombres
+        this.basicInfoProductos[6][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[6][2] = 5; // IVA en %
+        this.basicInfoProductos[6][3] = 6100.0f;
+    }
+    public void añadirProductoInventario(){
+        System.out.println("Ingresa el nombre del producto a añadir");
+        String nombre = sc.nextLine();
+        System.out.println("Ingresa la cantidad del producto a añadir");
+        int cantidad = sc.nextInt();
+        System.out.println("Ingresa el iva en % del producto a añadir");
+        int iva = sc.nextInt();
+        System.out.println("Ingresa el valor unitario del producto");
+        float precioUnitario = sc.nextFloat();
+
+        // creamos un nuevo array con un espacio libre al final para guardar el nuevo producto
+        Object[][] nuevoArray = new Object[this.basicInfoProductos.length + 1 ][4];
+
+        for (int i = 0; i < basicInfoProductos.length; i++ ){
+            nuevoArray[i] = basicInfoProductos[i];
+        }
+        this.basicInfoProductos = nuevoArray;
+        this.basicInfoProductos[this.basicInfoProductos.length - 1][0] = nombre;
+        this.basicInfoProductos[this.basicInfoProductos.length - 1][1] = cantidad; 
+        this.basicInfoProductos[this.basicInfoProductos.length - 1][2] = iva; 
+        this.basicInfoProductos[this.basicInfoProductos.length - 1][3] = precioUnitario; 
     }
      
     /*
@@ -60,6 +90,7 @@ public class InventarioProductos {
     }
 
     public void cargar() {
+        this.cantidadProductos = basicInfoProductos.length;
         this.data = new Object[this.cantidadProductos][8];
         for (int i = 0; i < this.cantidadProductos; i++) {
             // System.out.println("Ingresa el codigo del producto\n");
@@ -76,7 +107,7 @@ public class InventarioProductos {
             // [6] subtotal
             // [7] Total por producto
 
-            this.data[i][0] = rm.nextInt(10000); // codigo (int)
+            this.data[i][0] = rm.nextInt(100000, 999999); // codigo (int)
             this.data[i][1] = basicInfoProductos[i][0]; // nombre (String)
             this.data[i][2] = basicInfoProductos[i][1]; // cantidad (float)
             this.data[i][3] = basicInfoProductos[i][2]; // valor IVA en % (int)
@@ -211,14 +242,15 @@ public class InventarioProductos {
     // metodo para imprimir la tabla completa, sin los totales calculados (Solo los
     // datos que el usuario ingreso)
     public void imprimirVerificacion() {
+        this.ordenarMenorMayor();
         // Titulos de la tabla
-        System.out.printf("%-12s%-22s%-12s%-15s%-15s%n", "1. Codigo", "2. Nombre", "3. Cantidad", "4. Valor IVA",
+        System.out.printf("%-12s%-27s%-12s%-15s%-15s%n", "1. Codigo", "2. Nombre", "3. Cantidad", "4. Valor IVA",
                 "5. Precio Unitario");
         System.out.println();
         if(this.data!= null){
             // recorrido de filas en data
             for (Object[] fila : this.data) {
-                System.out.printf("%-12d%-22s%-12d%-15s%-15.2f%n", fila[0], fila[1], fila[2], fila[3], fila[4]);
+                System.out.printf("%-12d%-27s%-12d%-15s%-15.2f%n", fila[0], fila[1], fila[2], fila[3], fila[4]);
             }
         }else{
             System.out.println("Ups, al parecer olvidaste cargar el inventario de productos primero");

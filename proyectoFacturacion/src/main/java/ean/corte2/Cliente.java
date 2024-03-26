@@ -5,12 +5,12 @@ import java.util.Arrays;
 public class Cliente {
     private int cedula;
     private String nombre;
-    private int[] codigosFacturas;
+    private Factura[] facturasCliente;
     public Cliente(int cedula, String nombre){ 
         // cliente id -> Cedula
         this.cedula = cedula;
         this.nombre = nombre;
-        this.codigosFacturas = new int[0];
+        this.facturasCliente = new Factura[0];
     }
     public int getCedula() {
         return cedula;
@@ -24,13 +24,9 @@ public class Cliente {
     public void setNombre(String nombre) {
         this.nombre = nombre;
     }
-    public void addCodigoFactura(int nuevoCodigo) {
-        int[] arraycopy = Arrays.copyOf(this.codigosFacturas, this.codigosFacturas.length +1);
-        arraycopy[arraycopy.length-1] = nuevoCodigo;
-        this.codigosFacturas = arraycopy;
+    public void añadirFactura(Factura factura){
+        Factura[] arraycopy = Arrays.copyOf(this.facturasCliente, this.facturasCliente.length +1);
+        arraycopy[arraycopy.length-1] = factura;
+        this.facturasCliente = arraycopy;
     }
-    public int[] getCodigoFacturas() {
-        return codigosFacturas;
-    }
-
 }
