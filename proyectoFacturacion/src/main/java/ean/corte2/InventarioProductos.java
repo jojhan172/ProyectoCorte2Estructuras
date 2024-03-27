@@ -18,43 +18,46 @@ public class InventarioProductos {
     // de datos.
     public InventarioProductos(){
         this.basicInfoProductos= new Object[7][4];
+        this.cantidadProductos = basicInfoProductos.length;
+        this.data = new Object[this.cantidadProductos][8];
 
         this.basicInfoProductos[0][0] = "Arroz 25lb"; // nombres
-        this.basicInfoProductos[0][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[0][1] = rm.nextInt(10,100); // cantidad
         this.basicInfoProductos[0][2] = 0; // IVA en %
         this.basicInfoProductos[0][3] = 57600.0f;
 
 
         this.basicInfoProductos[1][0] = "Frijoles Enlatados 310g "; // nombres
-        this.basicInfoProductos[1][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[1][1] = rm.nextInt(10,100); // cantidad
         this.basicInfoProductos[1][2] = 19; // IVA en %
         this.basicInfoProductos[1][3] = 6400.0f;
 
         this.basicInfoProductos[2][0] = "Harina de Maiz 1kg"; // nombres
-        this.basicInfoProductos[2][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[2][1] = rm.nextInt(10,100); // cantidad
         this.basicInfoProductos[2][2] = 5; // IVA en %
         this.basicInfoProductos[2][3] = 4500.0f;
 
         this.basicInfoProductos[3][0] = "Aceite de Oliva 500ml"; // nombres
-        this.basicInfoProductos[3][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[3][1] = rm.nextInt(10,100); // cantidad
         this.basicInfoProductos[3][2] = 19; // IVA en %
         this.basicInfoProductos[3][3] = 33900.0f;
 
         this.basicInfoProductos[4][0] = "Azucar 2kg"; // nombres
-        this.basicInfoProductos[4][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[4][1] = rm.nextInt(10,100); // cantidad
         this.basicInfoProductos[4][2] = 5; // IVA en %
         this.basicInfoProductos[4][3] = 14900.0f;
 
         this.basicInfoProductos[5][0] = "Cafe 170gr"; // nombres
-        this.basicInfoProductos[5][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[5][1] = rm.nextInt(10,100); // cantidad
         this.basicInfoProductos[5][2] = 5; // IVA en %
         this.basicInfoProductos[5][3] = 29700.0f;
 
         this.basicInfoProductos[6][0] = "Coca Cola 1.5L"; // nombres
-        this.basicInfoProductos[6][1] = rm.nextInt(100); // cantidad
+        this.basicInfoProductos[6][1] = rm.nextInt(10,100); // cantidad
         this.basicInfoProductos[6][2] = 5; // IVA en %
         this.basicInfoProductos[6][3] = 6100.0f;
     }
+    
     public void añadirProductoInventario(){
         System.out.println("Ingresa el nombre del producto a añadir");
         String nombre = sc.nextLine();
@@ -90,8 +93,8 @@ public class InventarioProductos {
     }
 
     public void cargar() {
-        this.cantidadProductos = basicInfoProductos.length;
-        this.data = new Object[this.cantidadProductos][8];
+        
+        
         for (int i = 0; i < this.cantidadProductos; i++) {
             // System.out.println("Ingresa el codigo del producto\n");
             // this.data[i][0] = sc.nextInt();
@@ -214,6 +217,14 @@ public class InventarioProductos {
         this.ordenarMayorMenor(); // se ordena nuevamente para evitar errores
     }
 
+    public void modificarDesdeCliente(int target, int cantidadSolicitadaCliente){
+        int index = this.buscar(target);
+        int cantidadActual = (int) this.data[index][2];
+        int nuevaCantidad = cantidadActual - cantidadSolicitadaCliente;
+        this.data[index][2] = nuevaCantidad;
+        //System.out.println(cantidadSolicitadaCliente);
+    }
+    
     public void eliminarRegistro(int codigo) {
         this.ordenarMayorMenor();
         // verificamos que la fila exista dentro del array
@@ -247,7 +258,7 @@ public class InventarioProductos {
         System.out.printf("%-12s%-27s%-12s%-15s%-15s%n", "1. Codigo", "2. Nombre", "3. Cantidad", "4. Valor IVA",
                 "5. Precio Unitario");
         System.out.println();
-        if(this.data!= null){
+        if(this.data != null){
             // recorrido de filas en data
             for (Object[] fila : this.data) {
                 System.out.printf("%-12d%-27s%-12d%-15s%-15.2f%n", fila[0], fila[1], fila[2], fila[3], fila[4]);

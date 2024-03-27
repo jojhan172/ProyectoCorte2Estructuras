@@ -271,8 +271,11 @@ public class Main {
                                 int codigoProducto = sc.nextInt();
                                 System.out.println("Ingresa la cantidad que deseas de este producto");
                                 int cantidadProducto = sc.nextInt();
-                                if (facturaActiva.añadirAFactura(codigoProducto, cantidadProducto) == true){
+                                int result = facturaActiva.añadirAFactura(codigoProducto, cantidadProducto, false);
+                                if (result== 1){
                                     System.out.println("Producto añadido correcamtene");
+                                }else if (result == 2){
+                                    System.out.println("Demasiados! Nuestor inventario no tiene tantos");
                                 }else{
                                     System.out.println("Oops! Al parecer no encontramos un producto con ese codigo, intentalo nuevamente.");
                                 }
@@ -381,7 +384,7 @@ public class Main {
 
                         case 5: // añadir al inventario
                             inventario.añadirProductoInventario();
-                            inventario.cargar();
+                            //inventario.cargar();
                             break;
 
                         case 6: // editar inventario
