@@ -1,21 +1,18 @@
 package ean.corte2;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Stack;
-
 import ean.corte2.*;
 
-// workin' in
+// Desarrollado por: Johan Steven Hernández Daza, Bryan Steven Ruiz Hernández y Juan Esteban Garcia Pinzon
+
+
 public class Main {
 
-    // Menu clientes
-    /*
-     * 1. Ver inventario de la tienda
-     * 2. añadir productos a la factura
-     * 3. Eliminar productos de la factura
-     * 4. Imprimir factura
-     * 5. Finalizar factura y salir.
-     */
     public static int menuPrincipal() {
         Scanner sc = new Scanner(System.in);
         System.out.println("-----------------------------------------------------------");
@@ -57,13 +54,14 @@ public class Main {
                 "1. Crear nuevo inventario ó regenerar el existente\n" +
                 "2. Cargar inventario\n" + // in -> cantidad de datos a ingresar
                 "3. Ordenar por codigo (Mayor a menor)\n" + // true o false -> mayor a menor
-                "4. Buscar por codigo de producto\n" +
-                "5. Añadir producto al inventario\n"+ // int -> codigo
-                "6. Modificar campos del registro\n" + // in -> codigo
-                "7. Eliminar campos del registro\n" + // in -> codigo
-                "8. Mostras tabla del inventario\n" +
-                "9. Mostrar tabla de clientes\n" +
-                "10. Mostrar tabla de facturas\n" +
+                "4. Ordenar por codigo (Menor a mayor)\n"+
+                "5. Buscar por codigo de producto\n" +
+                "6. Añadir producto al inventario\n"+ // int -> codigo
+                "7. Modificar campos del registro\n" + // in -> codigo
+                "8. Eliminar campos del registro\n" + // in -> codigo
+                "9. Mostras tabla del inventario\n" +
+                "10. Mostrar tabla de clientes\n" +
+                "11. Mostrar tabla de facturas\n" +
                 "0. Salir");
 
         System.out.println("Ingresa el número de la opción que deseas");
@@ -104,7 +102,7 @@ public class Main {
                                                             // dentro de
         // las posibilidades del menu
         Scanner sc = new Scanner(System.in);
-        if (num >= 0 && num < 11) {
+        if (num >= 0 && num < 12) {
             return num;
         } else {
             System.out.println("Opción incorrecta, intentalo nuevamente");
@@ -126,6 +124,14 @@ public class Main {
         }
     }
 
+    public static Stack<Cliente> ordenarClientes(Stack<Cliente> clientes) {
+        List<Cliente> listaClientes = new ArrayList<>(clientes);
+        Collections.sort(listaClientes, Comparator.comparingInt(Cliente::getCedula));
+        Stack<Cliente> clientesOrdenados = new Stack<>();
+        listaClientes.forEach(clientesOrdenados::push);
+        return clientesOrdenados;
+    }
+    
     public static void imprimirClientes(Stack<Cliente> stackClientes) {
         Stack<Cliente> pivot = new Stack<Cliente>();
         pivot.addAll(stackClientes);
@@ -235,16 +241,13 @@ public class Main {
                         case 1: // Crear un nuevo cliente
                             // String nombre = sc.nextLine();
                             // int cedula = sc.nextInt();
-                            int stackCapacity = clientes.size();
-                            clientes.setSize(stackCapacity + 1); // se aumenta el tamaño del stack de uno en uno cada se agrega un cliente
-                            
-                            System.out.println("Ingresa tu nombre");
+                            System.out.println("Ingresa tu nombre completo");
                             String nombre = sc.nextLine();
+          
                             System.out.println("Ingresa tu numero de cedula");
                             int cedula = sc.nextInt();
                             clienteActivo = new Cliente(cedula, nombre);
                             clientes.push(clienteActivo);
-                            System.out.println(clientes.capacity());
 
                             // consiguiendo los codigos de las facturas del cliente
                             // sera util a la hora de armar la base de facturas
@@ -252,6 +255,7 @@ public class Main {
                             System.out.println("Cliente creado correctamente");
                             break;
                         case 2: // Mostrar inventario de la tienda
+                            inventario.ordenarMenorMayor();
                             inventario.imprimirVerificacion();
                             break;
                         case 3: // Crear factura o "Carrito de compras"
@@ -267,6 +271,7 @@ public class Main {
 
                         case 4: // Añadir producto al carrito
                             if (verificarExistenciaUsuarioYFactura(clienteActivo, facturaActiva) == 1) {
+                                inventario.ordenarMenorMayor();
                                 System.out.println("Ingresa el codigo del producto a añadir");
                                 int codigoProducto = sc.nextInt();
                                 System.out.println("Ingresa la cantidad que deseas de este producto");
@@ -359,12 +364,17 @@ public class Main {
                                 break;
                             }
 
-                        case 3: // ordenar inventario
-                            inventario.ordenarMenorMayor();
+                        case 3: // ordenar inventario mayor a menor
+                            inventario.ordenarMayorMenor();
+                            //inventario.ordenarMenorMayor();
                             System.out.println("Productos ordenados correctamente.");
                             break;
 
-                        case 4: // buscar en inventario
+                        case 4: // ordenar inventario menor a mayor
+                            inventario.ordenarMenorMayor();
+                            System.out.println("Productos ordenados correctamente.");
+                            break;
+                        case 5: // buscar en inventario
                             data = inventario.getData();
                             System.out.println("Ingresa el codigo del producto a buscar -> ");
                             int target = sc.nextInt();
@@ -382,12 +392,13 @@ public class Main {
                             }
                             break;
 
-                        case 5: // añadir al inventario
+                        case 6: // añadir al inventario
                             inventario.añadirProductoInventario();
+                            inventario.cargar();
                             //inventario.cargar();
                             break;
 
-                        case 6: // editar inventario
+                        case 7: // editar inventario
                             System.out.println("Ingresa el codigo del producto a editar");
                             int code = sc.nextInt();
                             System.out.println("Columna a editar");
@@ -395,19 +406,20 @@ public class Main {
                             inventario.modificar(code, column);
                             break;
 
-                        case 7: // eliminar de inventario
+                        case 8: // eliminar de inventario
                             System.out.println("Ingresa el codigo del producto a eliminar");
                             int delCode = sc.nextInt();
                             inventario.eliminarRegistro(delCode);
                             break;
 
-                        case 8: // mostrar inventario
+                        case 9: // mostrar inventario
                             inventario.imprimirVerificacion();
                             break;
-                        case 9: // Mostrar listado de clientes
-                            imprimirClientes(clientes);
+                        case 10: // Mostrar listado de clientes
+                            Stack<Cliente> clientesOrdenados = ordenarClientes(clientes);
+                            imprimirClientes(clientesOrdenados);
                             break;
-                        case 10: // mostrar listado de facturas.
+                        case 11: // mostrar listado de facturas.
                             imprimirFacturas(facturas);
                             break;
                         default:

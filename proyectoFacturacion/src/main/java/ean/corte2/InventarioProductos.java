@@ -69,16 +69,19 @@ public class InventarioProductos {
         float precioUnitario = sc.nextFloat();
 
         // creamos un nuevo array con un espacio libre al final para guardar el nuevo producto
-        Object[][] nuevoArray = new Object[this.basicInfoProductos.length + 1 ][4];
+        Object[][] nuevoArray = new Object[this.data.length + 1 ][8];
 
-        for (int i = 0; i < basicInfoProductos.length; i++ ){
-            nuevoArray[i] = basicInfoProductos[i];
+        for (int i = 0; i < data.length; i++ ){
+            nuevoArray[i] = data[i];
         }
-        this.basicInfoProductos = nuevoArray;
-        this.basicInfoProductos[this.basicInfoProductos.length - 1][0] = nombre;
-        this.basicInfoProductos[this.basicInfoProductos.length - 1][1] = cantidad; 
-        this.basicInfoProductos[this.basicInfoProductos.length - 1][2] = iva; 
-        this.basicInfoProductos[this.basicInfoProductos.length - 1][3] = precioUnitario; 
+        this.data = nuevoArray;
+        this.data[this.data.length - 1][0] = rm.nextInt(100000,999999);
+        this.data[this.data.length - 1][1] = nombre;
+        this.data[this.data.length - 1][2] = cantidad; 
+        this.data[this.data.length - 1][3] = iva; 
+        this.data[this.data.length - 1][4] = precioUnitario; 
+
+        System.out.println("Producto añadido correctamente");
     }
      
     /*
@@ -96,20 +99,6 @@ public class InventarioProductos {
         
         
         for (int i = 0; i < this.cantidadProductos; i++) {
-            // System.out.println("Ingresa el codigo del producto\n");
-            // this.data[i][0] = sc.nextInt();
-            // System.out.println("Ingresa el nombre del producto\n");
-            // this.data[i][1] = sc.next();
-            // System.out.println("Ingresa la cantidad de items del producto\n");
-            // this.data[i][2] = sc.nextFloat();
-            // System.out.println("Ingresa el valor del IVA del producto en %\n");
-            // this.data[i][3]= sc.nextInt();
-            // System.out.println("Ingresa el precio por unidad del producto\n");
-            // this.data[i][4] = sc.nextFloat();
-            // [5] Iva unitario
-            // [6] subtotal
-            // [7] Total por producto
-
             this.data[i][0] = rm.nextInt(100000, 999999); // codigo (int)
             this.data[i][1] = basicInfoProductos[i][0]; // nombre (String)
             this.data[i][2] = basicInfoProductos[i][1]; // cantidad (float)
@@ -253,11 +242,9 @@ public class InventarioProductos {
     // metodo para imprimir la tabla completa, sin los totales calculados (Solo los
     // datos que el usuario ingreso)
     public void imprimirVerificacion() {
-        this.ordenarMenorMayor();
         // Titulos de la tabla
         System.out.printf("%-12s%-27s%-12s%-15s%-15s%n", "1. Codigo", "2. Nombre", "3. Cantidad", "4. Valor IVA",
                 "5. Precio Unitario");
-        System.out.println();
         if(this.data != null){
             // recorrido de filas en data
             for (Object[] fila : this.data) {
